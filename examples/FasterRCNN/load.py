@@ -8,7 +8,7 @@ def load_session(pb_path):
     tf.import_graph_def(output_graph_def, name="")
     config = tf.compat.v1.ConfigProto(allow_soft_placement=True)
     sess = tf.compat.v1.Session(config=config)        
-    sess.run(tf.compat.v1.global_variables_initializer())
+#     sess.run(tf.compat.v1.global_variables_initializer())
 
     input_image_tensor = sess.graph.get_tensor_by_name("image:0")
     output_tensor_boxes = sess.graph.get_tensor_by_name("output/boxes:0")
