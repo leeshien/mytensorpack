@@ -158,13 +158,13 @@ if __name__ == '__main__':
     parser.add_argument('--output-pb', help='Save a model to .pb')
     parser.add_argument('--output-serving', help='Save a model to serving file')
     parser.add_argument('--output-inference', help='Path to save inference results')
-    parser.add_argument('--gpu', help='whether to inference using GPU', default="True")
+#     parser.add_argument('--gpu', help='whether to inference using GPU', default="True")
 
     args = parser.parse_args()
     print('args: ', args)
     print('eval(args.gpu): ', eval(args.gpu))
-    if eval(args.gpu)==False:
-        os.environ['CUDA_VISIBLE_DEVICES'] = '-1'
+#     if eval(args.gpu)==False:
+#         os.environ['CUDA_VISIBLE_DEVICES'] = '-1'
     if args.config:
         cfg.update_args(args.config)
     register_coco(cfg.DATA.BASEDIR)  # add COCO datasets to the registry
