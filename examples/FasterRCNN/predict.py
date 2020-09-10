@@ -161,6 +161,7 @@ if __name__ == '__main__':
     parser.add_argument('--gpu', help='whether to inference using GPU', default=True, type=bool)
 
     args = parser.parse_args()
+    print('args: ', args)
     if args.gpu==False:
         os.environ['CUDA_VISIBLE_DEVICES'] = '-1'
     if args.config:
