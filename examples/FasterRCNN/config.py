@@ -86,6 +86,8 @@ class AttrDict():
 config = AttrDict()
 _C = config     # short alias to avoid coding
 
+_C.USE_GPU = True
+
 # mode flags ---------------------
 _C.TRAINER = 'replicated'  # options: 'horovod', 'replicated'
 _C.MODE_MASK = True        # Faster R-CNN or Mask R-CNN
@@ -294,29 +296,32 @@ def finalize_configs(is_training):
             else:
                 _C.TRAIN.LR_SCHEDULE = eval(lr)
 
-        # setup NUM_GPUS
-        if _C.TRAINER == 'horovod':
-            import horovod.tensorflow as hvd
-            ngpu = hvd.size()
-            logger.info("Horovod Rank={}, Size={}, LocalRank={}".format(
-                hvd.rank(), hvd.size(), hvd.local_rank()))
-        else:
-            assert 'OMPI_COMM_WORLD_SIZE' not in os.environ
-            ngpu = get_num_gpu()
-        assert ngpu > 0, "Has to train with GPU!"
-        assert ngpu % 8 == 0 or 8 % ngpu == 0, "Can only train with 1,2,4 or >=8 GPUs, but found {} GPUs".format(ngpu)
+        if _C.USE_GPU == True:
+            # setup NUM_GPUS
+            if _C.TRAINER == 'horovod':
+                import horovod.tensorflow as hvd
+                ngpu = hvd.size()
+                logger.info("Horovod Rank={}, Size={}, LocalRank={}".format(
+                    hvd.rank(), hvd.size(), hvd.local_rank()))
+            else:
+                assert 'OMPI_COMM_WORLD_SIZE' not in os.environ
+                ngpu = get_num_gpu()
+            assert ngpu > 0, "Has to train with GPU!"
+            assert ngpu % 8 == 0 or 8 % ngpu == 0, "Can only train with 1,2,4 or >=8 GPUs, but found {} GPUs".format(ngpu)
     else:
+        if _C.USE_GPU == True:
         # autotune is too slow for inference
         os.environ['TF_CUDNN_USE_AUTOTUNE'] = '0'
         ngpu = get_num_gpu()
 
-    if _C.TRAIN.NUM_GPUS is None:
-        _C.TRAIN.NUM_GPUS = ngpu
-    else:
-        if _C.TRAINER == 'horovod':
-            assert _C.TRAIN.NUM_GPUS == ngpu
+    if _C.USE_GPU==True:
+        if _C.TRAIN.NUM_GPUS is None:
+            _C.TRAIN.NUM_GPUS = ngpu
         else:
-            assert _C.TRAIN.NUM_GPUS <= ngpu
+            if _C.TRAINER == 'horovod':
+                assert _C.TRAIN.NUM_GPUS == ngpu
+            else:
+                assert _C.TRAIN.NUM_GPUS <= ngpu
 
-    _C.freeze()
-    logger.info("Config: ------------------------------------------\n" + str(_C))
+        _C.freeze()
+        logger.info("Config: ------------------------------------------\n" + str(_C))
