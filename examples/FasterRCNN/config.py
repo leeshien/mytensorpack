@@ -313,9 +313,9 @@ def finalize_configs(is_training):
             assert ngpu % 8 == 0 or 8 % ngpu == 0, "Can only train with 1,2,4 or >=8 GPUs, but found {} GPUs".format(ngpu)
     else:
         if _C.USE_GPU == True:
-        # autotune is too slow for inference
-        os.environ['TF_CUDNN_USE_AUTOTUNE'] = '0'
-        ngpu = get_num_gpu()
+            # autotune is too slow for inference
+            os.environ['TF_CUDNN_USE_AUTOTUNE'] = '0'
+            ngpu = get_num_gpu()
 
     if _C.USE_GPU==True:
         if _C.TRAIN.NUM_GPUS is None:
