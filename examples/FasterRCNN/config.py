@@ -241,6 +241,9 @@ def finalize_configs(is_training):
     """
     Run some sanity checks, and populate some configs from others
     """
+    if _C.USE_GPU == False:
+        os.environ['CUDA_VISIBLE_DEVICES'] = '-1'
+        
     _C.freeze(False)  # populate new keys now
     if isinstance(_C.DATA.VAL, six.string_types):  # support single string (the typical case) as well
         _C.DATA.VAL = (_C.DATA.VAL, )
