@@ -162,7 +162,7 @@ if __name__ == '__main__':
 
     args = parser.parse_args()
     print('args: ', args)
-    print('eval(args.gpu): ', eval(args.gpu))
+#     print('eval(args.gpu): ', eval(args.gpu))
 #     if eval(args.gpu)==False:
 #         os.environ['CUDA_VISIBLE_DEVICES'] = '-1'
     if args.config:
