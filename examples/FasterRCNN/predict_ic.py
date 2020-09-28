@@ -50,8 +50,6 @@ def do_predict_pb(sess, input_tensor, output_tensors, input_file, output_file):
         viz = img
     cv2.imwrite(output_file, viz)
     logger.info("Inference output for {} written to output.png".format(output_file))
-#     tpviz.interactive_imshow(viz)
-
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
@@ -75,12 +73,12 @@ if __name__ == '__main__':
     finalize_configs(is_training=False)
     cfg.TEST.RESULT_SCORE_THRESH = cfg.TEST.RESULT_SCORE_THRESH_VIS
 
-            outpath = args.output_inference
-            if not os.path.exists(outpath):
-                os.makedirs(outpath)            
-            files = [f for f in os.listdir(args.predict[0]) if os.path.isfile(os.path.join(args.predict[0], f))]
-            imgfiles = [f for f in files if f.lower().endswith('.jpg') or f.lower().endswith('.jpeg') or f.lower().endswith('.png')]            
+    outpath = args.output_inference
+    if not os.path.exists(outpath):
+        os.makedirs(outpath)            
+    files = [f for f in os.listdir(args.predict[0]) if os.path.isfile(os.path.join(args.predict[0], f))]
+    imgfiles = [f for f in files if f.lower().endswith('.jpg') or f.lower().endswith('.jpeg') or f.lower().endswith('.png')]            
 
-            sess, input_tensor, output_tensors = load_session(args.load_pb)
-            for i,image_file in enumerate(imgfiles): 
-                do_predict_pb(sess, input_tensor, output_tensors, os.path.join(args.predict[0], image_file), outpath+image_file)  
+    sess, input_tensor, output_tensors = load_session(args.load_pb)
+    for i,image_file in enumerate(imgfiles): 
+        do_predict_pb(sess, input_tensor, output_tensors, os.path.join(args.predict[0], image_file), outpath+image_file)  
