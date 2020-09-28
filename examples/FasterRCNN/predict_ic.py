@@ -53,25 +53,17 @@ def do_predict_pb(sess, input_tensor, output_tensors, input_file, output_file):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('--load-pb', help='load a pb model for evaluation.')
     parser.add_argument('--predict', help="Run prediction on a given image. "
                                           "This argument is the path to the input image file", nargs='+')
     parser.add_argument('--config', help="A list of KEY=VALUE to overwrite those defined in config.py",
                         nargs='+')
     parser.add_argument('--output-inference', help='Path to save inference results')
-    parser.add_argument('--gpu', help='whether to inference using GPU', default="True")
 
     args = parser.parse_args()
-    if eval(args.gpu)==False:
-        os.environ['CUDA_VISIBLE_DEVICES'] = '-1'
     if args.config:
         cfg.update_args(args.config)
-    register_coco(cfg.DATA.BASEDIR)  # add COCO datasets to the registry
-    register_ic(cfg.DATA.BASEDIR)
 
-    assert args.load_ckpt or args.load_pb
     finalize_configs(is_training=False)
-    cfg.TEST.RESULT_SCORE_THRESH = cfg.TEST.RESULT_SCORE_THRESH_VIS
 
     outpath = args.output_inference
     if not os.path.exists(outpath):
@@ -79,6 +71,5 @@ if __name__ == '__main__':
     files = [f for f in os.listdir(args.predict[0]) if os.path.isfile(os.path.join(args.predict[0], f))]
     imgfiles = [f for f in files if f.lower().endswith('.jpg') or f.lower().endswith('.jpeg') or f.lower().endswith('.png')]            
 
-    sess, input_tensor, output_tensors = load_session(args.load_pb)
     for i,image_file in enumerate(imgfiles): 
         do_predict_pb(sess, input_tensor, output_tensors, os.path.join(args.predict[0], image_file), outpath+image_file)  
