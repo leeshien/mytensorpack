@@ -1,5 +1,8 @@
 import tensorflow as tf
 
+from config import config as cfg
+from config import finalize_configs
+
 def load_session(pb_path):
     g = tf.Graph().as_default()
     output_graph_def = tf.compat.v1.GraphDef()
@@ -19,3 +22,15 @@ def load_session(pb_path):
     output_tensors = [output_tensor_boxes, output_tensor_scores, output_tensor_labels, output_tensor_masks]
 
     return sess, input_image_tensor, output_tensors
+
+def setup_predict_config(config, gpu=True)
+    if eval(gpu)==False:
+        os.environ['CUDA_VISIBLE_DEVICES'] = '-1'
+    if config:
+        cfg.update_args(config)
+    register_coco(cfg.DATA.BASEDIR)  # add COCO datasets to the registry
+    register_ic(cfg.DATA.BASEDIR)
+
+    finalize_configs(is_training=False)
+    cfg.TEST.RESULT_SCORE_THRESH = cfg.TEST.RESULT_SCORE_THRESH_VIS
+
