@@ -23,7 +23,7 @@ def load_session(pb_path):
 
     return sess, input_image_tensor, output_tensors
 
-def setup_predict_config(config, gpu=True)
+def setup_predict_config(config, gpu=True):
     if eval(gpu)==False:
         os.environ['CUDA_VISIBLE_DEVICES'] = '-1'
     if config:
