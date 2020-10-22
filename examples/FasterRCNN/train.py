@@ -9,7 +9,7 @@ from tensorpack import *
 from tensorpack.tfutils import collect_env_info
 print('We have imported Tensorpack package')
 
-from dataset import register_coco, register_ic
+from dataset import register_coco, register_ic, register_shuttlecock
 from config import config as cfg
 from config import finalize_configs
 from data import get_train_dataflow
