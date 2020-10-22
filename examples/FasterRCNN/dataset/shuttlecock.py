@@ -48,9 +48,10 @@ class Shuttlecock(DatasetSplit):
             jsonfiles = [f for f in files if f.endswith('.json')]
             imgfiles = [f for f in files if f.endswith('.jpeg') or f.endswith('.jpg')]
 
-       
+            print('path: ', path)
+            print('jsonfiles: ', jsonfiles[0])
             for fn in jsonfiles:
-                json_file = os.path.join(self.imgdir, fn)
+                json_file = os.path.join(path, fn)
                 with open(json_file) as f:
                     obj = json.load(f)
 
