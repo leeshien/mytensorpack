@@ -89,7 +89,7 @@ class Shuttlecock(DatasetSplit):
                         print('roib: ', roib)
                         ret.append(roidb) 
                     except Exception as e:
-                        print(fn, ' not does matched with any image')
+                        print(' E: ', str(e))
                         pass  
         
         return ret
