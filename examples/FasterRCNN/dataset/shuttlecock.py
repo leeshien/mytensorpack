@@ -59,38 +59,38 @@ class Shuttlecock(DatasetSplit):
                     with open(json_file) as f:
                         obj = json.load(f)
 
-                    try:
-                        print('json: ', fn.split('.')[0])
-                        for filename in imgfiles:                            
-                            if fn.split('.')[0] in filename:
-                                print(' - matched')
+#                     try:
+                    print('json: ', fn.split('.')[0])
+                    for filename in imgfiles:                            
+                        if fn.split('.')[0] in filename:
+                            print(' - matched')
 
-                        fname = [filename for filename in imgfiles if fn.split('.')[0] in filename][0] #image filename
-                        print('fname BEFORE: ', fname)
-                        fname = os.path.join(path, fname)
-                        print('fname AFTER: ', fname)
+                    fname = [filename for filename in imgfiles if fn.split('.')[0] in filename][0] #image filename
+                    print('fname BEFORE: ', fname)
+                    fname = os.path.join(path, fname)
+                    print('fname AFTER: ', fname)
 
-                        roidb = {"file_name": fname}
+                    roidb = {"file_name": fname}
 
-                        annos = obj["shapes"]
+                    annos = obj["shapes"]
 
-                        poly = np.asarray(list(map(int, annos["points"])))
-                        maxxy = poly.max(axis=0)
-                        minxy = poly.min(axis=0)
+                    poly = np.asarray(list(map(int, annos["points"])))
+                    maxxy = poly.max(axis=0)
+                    minxy = poly.min(axis=0)
 
-                        boxes.append([minxy[0], minxy[1], maxxy[0], maxxy[1]])            
+                    boxes.append([minxy[0], minxy[1], maxxy[0], maxxy[1]])            
 
-                        N = 1
-                        roidb["boxes"] = np.asarray(boxes, dtype=np.float32)
-                        roidb["segmentation"] = [[poly]]
+                    N = 1
+                    roidb["boxes"] = np.asarray(boxes, dtype=np.float32)
+                    roidb["segmentation"] = [[poly]]
 
-                        roidb["class"] = np.ones((N, ), dtype=np.int32)
-                        roidb["is_crowd"] = np.zeros((N, ), dtype=np.int8)
-                        print('roib: ', roib)
-                        ret.append(roidb) 
-                    except Exception as e:
-                        print(' E: ', str(e))
-                        pass  
+                    roidb["class"] = np.ones((N, ), dtype=np.int32)
+                    roidb["is_crowd"] = np.zeros((N, ), dtype=np.int8)
+                    print('roib: ', roib)
+                    ret.append(roidb) 
+#                     except Exception as e:
+#                         print(' E: ', str(e))
+#                         pass  
         
         return ret
 
