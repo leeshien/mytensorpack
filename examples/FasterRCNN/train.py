@@ -35,6 +35,7 @@ if __name__ == '__main__':
     parser.add_argument('--logdir', help='Log directory. Will remove the old one if already exists.',
                         default='train_log/maskrcnn')
     parser.add_argument('--config', help="A list of KEY=VALUE to overwrite those defined in config.py", nargs='+')
+    parser.add_argument('--dataset', help='Specify which dataset to train')
 
     args = parser.parse_args()
     print('args: ', args)
@@ -42,7 +43,10 @@ if __name__ == '__main__':
         print('args.config: ', args.config)
         cfg.update_args(args.config)
     register_coco(cfg.DATA.BASEDIR)  # add COCO datasets to the registry
-    register_ic(cfg.DATA.BASEDIR)  # add the demo balloon datasets to the registry
+    if args.dataset == "shuttlecock":
+        register_shuttlecock(cfg.DATA.BASEDIR)
+    else:
+        register_ic(cfg.DATA.BASEDIR)  # add the demo balloon datasets to the registry
 
     # Setup logging ...
     is_horovod = cfg.TRAINER == 'horovod'
