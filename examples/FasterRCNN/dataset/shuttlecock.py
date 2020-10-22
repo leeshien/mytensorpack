@@ -20,6 +20,8 @@ class Shuttlecock(DatasetSplit):
         assert split in ["train", "val"]
         base_dir = os.path.expanduser(base_dir)
         self.imgdir = os.path.join(base_dir, split)
+        print('base_dir: ', base_dir)
+        print('self.imgdir: ', self.imgdir)
         assert os.path.isdir(self.imgdir), self.imgdir
 
     def line_intersection(self, line1, line2):
