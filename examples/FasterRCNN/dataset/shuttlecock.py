@@ -40,7 +40,7 @@ class Shuttlecock(DatasetSplit):
         ret = []
         boxes = []
         segs = []         
-        for (path, b, files) in walk(self.imgdir):
+        for (path, b, files) in os.walk(self.imgdir):
 
             # files = [f for f in os.listdir(self.imgdir) if os.path.isfile(os.path.join(self.imgdir, f))]
             jsonfiles = [f for f in files if f.endswith('.json')]
