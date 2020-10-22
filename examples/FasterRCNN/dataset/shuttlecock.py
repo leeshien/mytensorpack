@@ -43,42 +43,42 @@ class Shuttlecock(DatasetSplit):
         boxes = []
         segs = []         
         for (path, b, files) in os.walk(self.imgdir):
+            if files:
+                # files = [f for f in os.listdir(self.imgdir) if os.path.isfile(os.path.join(self.imgdir, f))]
+                jsonfiles = [f for folder in files for f in folder if f.endswith('.json')]
+                imgfiles = [f for folder in files for f in folder if f.endswith('.jpeg') or f.endswith('.jpg')]
 
-            # files = [f for f in os.listdir(self.imgdir) if os.path.isfile(os.path.join(self.imgdir, f))]
-            jsonfiles = [f for folder in files for f in folder if f.endswith('.json')]
-            imgfiles = [f for folder in files for f in folder if f.endswith('.jpeg') or f.endswith('.jpg')]
+                print('path: ', path)
+                print('jsonfiles: ', jsonfiles[0])
+                for fn in jsonfiles:
+                    json_file = os.path.join(path, fn)
+                    with open(json_file) as f:
+                        obj = json.load(f)
 
-            print('path: ', path)
-            print('jsonfiles: ', jsonfiles[0])
-            for fn in jsonfiles:
-                json_file = os.path.join(path, fn)
-                with open(json_file) as f:
-                    obj = json.load(f)
+                    try:
+                        fname = [filename for filename in imgfiles if fn.split('.')[0] in filename][0] #image filename
+                        fname = os.path.join(self.imgdir, fname)
 
-                try:
-                    fname = [filename for filename in imgfiles if fn.split('.')[0] in filename][0] #image filename
-                    fname = os.path.join(self.imgdir, fname)
+                        roidb = {"file_name": fname}
 
-                    roidb = {"file_name": fname}
+                        annos = obj["shapes"]
 
-                    annos = obj["shapes"]
+                        poly = np.asarray(poly)
+                        maxxy = poly.max(axis=0)
+                        minxy = poly.min(axis=0)
 
-                    poly = np.asarray(poly)
-                    maxxy = poly.max(axis=0)
-                    minxy = poly.min(axis=0)
-                    
-                    boxes.append([minxy[0], minxy[1], maxxy[0], maxxy[1]])            
-                        
-                    N = 1
-                    roidb["boxes"] = np.asarray(boxes, dtype=np.float32)
-                    roidb["segmentation"] = [[poly]]
+                        boxes.append([minxy[0], minxy[1], maxxy[0], maxxy[1]])            
 
-                    roidb["class"] = np.ones((N, ), dtype=np.int32)
-                    roidb["is_crowd"] = np.zeros((N, ), dtype=np.int8)
-                    ret.append(roidb) 
-                except Exception as e:
-                    print(fn, ' not does matched with any image')
-                    pass  
+                        N = 1
+                        roidb["boxes"] = np.asarray(boxes, dtype=np.float32)
+                        roidb["segmentation"] = [[poly]]
+
+                        roidb["class"] = np.ones((N, ), dtype=np.int32)
+                        roidb["is_crowd"] = np.zeros((N, ), dtype=np.int8)
+                        ret.append(roidb) 
+                    except Exception as e:
+                        print(fn, ' not does matched with any image')
+                        pass  
         
         return ret
 
