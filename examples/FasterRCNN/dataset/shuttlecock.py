@@ -60,6 +60,13 @@ class Shuttlecock(DatasetSplit):
                         obj = json.load(f)
 
                     try:
+                        for filename in imgfiles:
+                            print('img filename: ', filename)
+                            print('json: ', fn.split('.')[0])
+                            if fn.split('.')[0] in filename:
+                                print(' - matched')
+                            else:
+                                print(' - not matched')
                         fname = [filename for filename in imgfiles if fn.split('.')[0] in filename][0] #image filename
                         fname = os.path.join(self.imgdir, fname)
 
