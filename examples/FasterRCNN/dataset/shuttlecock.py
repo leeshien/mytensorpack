@@ -74,7 +74,8 @@ class Shuttlecock(DatasetSplit):
 
                     annos = obj["shapes"]
 
-                    poly = np.asarray(list(map(int, annos["points"])))
+                    poly = np.asarray(annos[0]["points])
+#                     poly = np.asarray(list(map(int, annos["points"])))
                     maxxy = poly.max(axis=0)
                     minxy = poly.min(axis=0)
 
