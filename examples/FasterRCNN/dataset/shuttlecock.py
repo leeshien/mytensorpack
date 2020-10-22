@@ -60,9 +60,8 @@ class Shuttlecock(DatasetSplit):
                         obj = json.load(f)
 
                     try:
-                        for filename in imgfiles:
-                            print('img filename: ', filename)
-                            print('json: ', fn.split('.')[0])
+                        print('json: ', fn.split('.')[0])
+                        for filename in imgfiles:                            
                             if fn.split('.')[0] in filename:
                                 print(' - matched')
 
