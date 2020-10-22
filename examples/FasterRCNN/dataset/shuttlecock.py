@@ -87,7 +87,7 @@ class Shuttlecock(DatasetSplit):
 
                     roidb["class"] = np.ones((N, ), dtype=np.int32)
                     roidb["is_crowd"] = np.zeros((N, ), dtype=np.int8)
-                    print('roib: ', roib)
+                    print('roidb: ', roidb)
                     ret.append(roidb) 
 #                     except Exception as e:
 #                         print(' E: ', str(e))
