@@ -66,7 +66,7 @@ class Shuttlecock(DatasetSplit):
                                 print(' - matched')
 
                         fname = [filename for filename in imgfiles if fn.split('.')[0] in filename][0] #image filename
-                        fname = os.path.join(self.imgdir, fname)
+                        fname = os.path.join(path, fname)
 
                         roidb = {"file_name": fname}
 
