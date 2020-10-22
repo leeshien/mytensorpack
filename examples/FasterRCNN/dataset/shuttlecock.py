@@ -78,8 +78,8 @@ class Shuttlecock(DatasetSplit):
                 except Exception as e:
                     print(fn, ' not does matched with any image')
                     pass  
-
-           return ret
+        
+        return ret
 
 def register_shuttlecock(basedir):
     for split in ["train", "val"]:
