@@ -107,6 +107,7 @@ class DatasetRegistry():
             value: the value of the metadata
         """
         DatasetRegistry._metadata_registry[name][key] = value
+        print("DatasetRegistry._metadata_registry: name={}, key={}, value={}".format(name, key, value))
 
     @staticmethod
     def get_metadata(name, key):
