@@ -40,8 +40,7 @@ class Shuttlecock(DatasetSplit):
 
     def training_roidbs(self):
         ret = []
-        boxes = []
-        segs = []         
+         
         for (path, b, files) in os.walk(self.imgdir):
             if files:
                 # files = [f for f in os.listdir(self.imgdir) if os.path.isfile(os.path.join(self.imgdir, f))]
@@ -54,6 +53,8 @@ class Shuttlecock(DatasetSplit):
 
                 print('path: ', path)
                 print('jsonfiles: ', jsonfiles[0])
+                boxes = []
+                segs = []                
                 for fn in jsonfiles:
                     json_file = os.path.join(path, fn)
                     with open(json_file) as f:
@@ -80,15 +81,16 @@ class Shuttlecock(DatasetSplit):
                     minxy = poly.min(axis=0)
 
                     boxes.append([minxy[0], minxy[1], maxxy[0], maxxy[1]])            
+                    segs.append([poly])
+                
+                N = 1
+                roidb["boxes"] = np.asarray(boxes, dtype=np.float32)
+                roidb["segmentation"] = segs
 
-                    N = 1
-                    roidb["boxes"] = np.asarray(boxes, dtype=np.float32)
-                    roidb["segmentation"] = [[poly]]
-
-                    roidb["class"] = np.ones((N, ), dtype=np.int32)
-                    roidb["is_crowd"] = np.zeros((N, ), dtype=np.int8)
-                    print('roidb: ', roidb)
-                    ret.append(roidb) 
+                roidb["class"] = np.ones((N, ), dtype=np.int32)
+                roidb["is_crowd"] = np.zeros((N, ), dtype=np.int8)
+                print('roidb: ', roidb)
+                ret.append(roidb) 
 #                     except Exception as e:
 #                         print(' E: ', str(e))
 #                         pass  
