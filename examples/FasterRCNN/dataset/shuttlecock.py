@@ -82,7 +82,7 @@ class Shuttlecock(DatasetSplit):
                     boxes.append([minxy[0], minxy[1], maxxy[0], maxxy[1]])            
 
                     N = 1
-                    roidb["boxes"] = np.asarray(boxes, dtype=np.float32)
+                    roidb["boxes"] = np.asarray(boxes[0], dtype=np.float32)
                     roidb["segmentation"] = [[poly]]
 
                     roidb["class"] = np.ones((N, ), dtype=np.int32)
