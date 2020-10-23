@@ -346,8 +346,8 @@ def get_train_dataflow():
     # The model does support training with empty images, but it is not useful for COCO.
     num = len(roidbs)
     if cfg.DATA.FILTER_EMPTY_ANNOTATIONS:
-        print('========= ', roidbs[0]["boxes"], roidbs[0]["is_crowd"])
-        print('   ====== ', len(roidbs[0]["boxes"][roidbs[0]["is_crowd"] == 0]))
+#         print('========= ', roidbs[0]["boxes"], roidbs[0]["is_crowd"])
+#         print('   ====== ', len(roidbs[0]["boxes"][roidbs[0]["is_crowd"] == 0]))
         roidbs = list(filter(lambda img: len(img["boxes"][img["is_crowd"] == 0]) > 0, roidbs))
     logger.info(
         "Filtered {} images which contain no non-crowd groudtruth boxes. Total #images for training: {}".format(
