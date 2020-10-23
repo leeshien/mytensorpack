@@ -214,8 +214,8 @@ class TrainingDataPreprocessor:
             fm_boxes: fHxfWx NUM_ANCHOR_RATIOS x4
         """
         boxes = boxes.copy()
-        print('---- boxes: ', boxes)
-        print('---- is_crowd == 0: ', is_crowd == 0)
+#         print('---- boxes: ', boxes)
+#         print('---- is_crowd == 0: ', is_crowd == 0)
         anchors_per_level = get_all_anchors_fpn(
             strides=self.cfg.FPN.ANCHOR_STRIDES,
             sizes=self.cfg.RPN.ANCHOR_SIZES,
