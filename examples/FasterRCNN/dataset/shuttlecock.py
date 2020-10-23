@@ -83,17 +83,17 @@ class Shuttlecock(DatasetSplit):
                     boxes.append([minxy[0], minxy[1], maxxy[0], maxxy[1]])            
                     segs.append([poly])
                 
-                N = 1
-                roidb["boxes"] = np.asarray(boxes, dtype=np.float32)
-                roidb["segmentation"] = segs
+                    N = 1
+                    roidb["boxes"] = np.asarray(boxes, dtype=np.float32)
+                    roidb["segmentation"] = segs
 
-                roidb["class"] = np.ones((N, ), dtype=np.int32)
-                roidb["is_crowd"] = np.zeros((N, ), dtype=np.int8)
-                print('roidb: ', roidb)
-                ret.append(roidb) 
-#                     except Exception as e:
-#                         print(' E: ', str(e))
-#                         pass  
+                    roidb["class"] = np.ones((N, ), dtype=np.int32)
+                    roidb["is_crowd"] = np.zeros((N, ), dtype=np.int8)
+                    print('roidb: ', roidb)
+                    ret.append(roidb) 
+    #                     except Exception as e:
+    #                         print(' E: ', str(e))
+    #                         pass  
         
         return ret
 
