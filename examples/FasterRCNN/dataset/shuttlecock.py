@@ -53,9 +53,11 @@ class Shuttlecock(DatasetSplit):
 
                 print('path: ', path)
                 print('jsonfiles: ', jsonfiles[0])
-                boxes = []
-                segs = []                
+              
                 for fn in jsonfiles:
+                    boxes = []
+                    segs = []        
+                    
                     json_file = os.path.join(path, fn)
                     with open(json_file) as f:
                         obj = json.load(f)
