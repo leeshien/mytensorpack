@@ -111,6 +111,7 @@ class SaverRestore(SessionInit):
         self.saver = tf.train.Saver(var_list=dic, name=str(id(dic)))
 
     def _run_init(self, sess):
+        print('SaverRestore')
         logger.info("Restoring checkpoint from {} ...".format(self.path))
         self.saver.restore(sess, self.path)
 
@@ -172,6 +173,7 @@ class SaverRestoreRelaxed(SaverRestore):
         Another advantage is that it doesn't add any new ops to the graph.
     """
     def _run_init(self, sess):
+        print('SaverRestoreRelaxed')
         logger.info(
             "Restoring checkpoint from {} ...".format(self.path))
 
@@ -209,6 +211,7 @@ class DictRestore(SessionInit):
         self._ignore_mismatch = ignore_mismatch
 
     def _run_init(self, sess):
+        print('DictRestore')
         variables = tf.get_collection(tf.GraphKeys.GLOBAL_VARIABLES)
         variable_names_list = [k.name for k in variables]
 
@@ -256,6 +259,7 @@ class ChainInit(SessionInit):
             i._setup_graph()
 
     def _run_init(self, sess):
+        print('ChainInit')
         for i in self.inits:
             i._run_init(sess)
 
