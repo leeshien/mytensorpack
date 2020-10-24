@@ -126,7 +126,8 @@ def do_predict_ckpt(pred_func, input_file, output_file):
         final = draw_final_outputs_blackwhite(img, results)
     else:
         final = draw_final_outputs(img, results)
-        
+    
+    print('  results: ', results)
     if results:
         binary = results[0].mask*255
         dilate = cv2.dilate(binary, np.ones((7,7), np.uint8))
