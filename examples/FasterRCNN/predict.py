@@ -205,6 +205,7 @@ if __name__ == '__main__':
             ModelExporter(predcfg).export_serving(args.output_serving)
 
         if args.predict:
+            print('args.predict: ', args.predict)
             outpath = args.output_inference
             if not os.path.exists(outpath):
                 os.makedirs(outpath)            
