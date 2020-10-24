@@ -15,7 +15,7 @@ from tensorpack.tfutils import SmartInit, get_tf_version_tuple
 from tensorpack.tfutils.export import ModelExporter
 from tensorpack.utils import fs, logger
 
-from dataset import DatasetRegistry, register_coco, register_ic
+from dataset import DatasetRegistry, register_coco, register_ic, register_shuttlecock
 from config import config as cfg
 from config import finalize_configs
 from data import get_eval_dataflow, get_train_dataflow
@@ -158,6 +158,7 @@ if __name__ == '__main__':
     parser.add_argument('--output-pb', help='Save a model to .pb')
     parser.add_argument('--output-serving', help='Save a model to serving file')
     parser.add_argument('--output-inference', help='Path to save inference results')
+    parser.add_argument('--dataset', help='Specify which dataset to predict')
 #     parser.add_argument('--gpu', help='whether to inference using GPU', default="True")
 
     args = parser.parse_args()
@@ -168,7 +169,10 @@ if __name__ == '__main__':
     if args.config:
         cfg.update_args(args.config)
     register_coco(cfg.DATA.BASEDIR)  # add COCO datasets to the registry
-    register_ic(cfg.DATA.BASEDIR)
+    if args.dataset == "shuttlecock":
+        register_shuttlecock(cfg.DATA.BASEDIR)
+    else:
+        register_ic(cfg.DATA.BASEDIR)  # add the demo balloon datasets to the registry
 
     MODEL = ResNetFPNModel() if cfg.MODE_FPN else ResNetC4Model()
 
