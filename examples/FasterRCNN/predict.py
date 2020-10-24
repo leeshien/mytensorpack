@@ -209,9 +209,11 @@ if __name__ == '__main__':
             if not os.path.exists(outpath):
                 os.makedirs(outpath)            
             files = [f for f in os.listdir(args.predict[0]) if os.path.isfile(os.path.join(args.predict[0], f))]
-            imgfiles = [f for f in files if f.lower().endswith('.jpg') or f.lower().endswith('.jpeg') or f.lower().endswith('.png')]            
+            imgfiles = [f for f in files if f.lower().endswith('.jpg') or f.lower().endswith('.jpeg') or f.lower().endswith('.png')]    
+            print('predict imgfiles: ', imgfiles)
             if args.load_ckpt:
                 predictor = OfflinePredictor(predcfg)
+                print('done loading OfflinePredictor')
                 for i,image_file in enumerate(imgfiles): 
                     do_predict_ckpt(predictor, os.path.join(args.predict[0], image_file), outpath+image_file)                  
             else:
