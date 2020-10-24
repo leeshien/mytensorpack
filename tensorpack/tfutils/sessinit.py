@@ -114,6 +114,7 @@ class SaverRestore(SessionInit):
         print('SaverRestore')
         logger.info("Restoring checkpoint from {} ...".format(self.path))
         self.saver.restore(sess, self.path)
+        print('successfully restored')
 
     @staticmethod
     def _read_checkpoint_vars(model_path):
