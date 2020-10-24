@@ -210,6 +210,7 @@ if __name__ == '__main__':
             if not os.path.exists(outpath):
                 os.makedirs(outpath)            
             files = [f for f in os.listdir(args.predict[0]) if os.path.isfile(os.path.join(args.predict[0], f))]
+            print('predict files: ', files)
             imgfiles = [f for f in files if f.lower().endswith('.jpg') or f.lower().endswith('.jpeg') or f.lower().endswith('.png')]    
             print('predict imgfiles: ', imgfiles)
             if args.load_ckpt:
