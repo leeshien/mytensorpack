@@ -156,7 +156,7 @@ def predict_image_pb(sess, input_tensor, output_tensors, img):
     resized_img = resizer.augment(img)
     scale = np.sqrt(resized_img.shape[0] * 1.0 / img.shape[0] * resized_img.shape[1] / img.shape[1])
 #     boxes, probs, labels, *masks = model_func(resized_img)
-    boxes, probs, labels, masks = sess.run(output_tensors, feed_dict={input_tensor: resized_img})
+    boxes, probs, labels, *masks = sess.run(output_tensors, feed_dict={input_tensor: resized_img})
 
     # Some slow numpy postprocessing:
     boxes = boxes / scale
