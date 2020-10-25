@@ -17,9 +17,11 @@ def load_session(pb_path):
     output_tensor_boxes = sess.graph.get_tensor_by_name("output/boxes:0")
     output_tensor_scores = sess.graph.get_tensor_by_name("output/scores:0")
     output_tensor_labels = sess.graph.get_tensor_by_name("output/labels:0")
-    output_tensor_masks = sess.graph.get_tensor_by_name("output/masks:0")
-
-    output_tensors = [output_tensor_boxes, output_tensor_scores, output_tensor_labels, output_tensor_masks]
+    if cfg.MODE_MASK == True:
+        output_tensor_masks = sess.graph.get_tensor_by_name("output/masks:0")
+        output_tensors = [output_tensor_boxes, output_tensor_scores, output_tensor_labels, output_tensor_masks]
+    else:
+        output_tensors = [output_tensor_boxes, output_tensor_scores, output_tensor_labels]
 
     return sess, input_image_tensor, output_tensors
 
