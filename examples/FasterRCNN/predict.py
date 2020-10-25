@@ -93,7 +93,7 @@ def do_evaluate(pred_config, output_file):
         DatasetRegistry.get(dataset).eval_inference_results(all_results, output)
 
 
-def do_predict_pb(sess, input_tensor, output_tensors, input_file, output_file):
+def do_predict_pb(sess, input_tensor, output_tensors, input_file, output_file, drawcontour=True):
     print('input fn: ', input_file)
     img = cv2.imread(input_file, cv2.IMREAD_COLOR)
     results = predict_image_pb(sess, input_tensor, output_tensors, img)
@@ -102,23 +102,26 @@ def do_predict_pb(sess, input_tensor, output_tensors, input_file, output_file):
     else:
         final = draw_final_outputs(img, results)
         
-    if results:
-        binary = results[0].mask*255
-        dilate = cv2.dilate(binary, np.ones((7,7), np.uint8))
-        erode = cv2.erode(dilate, np.ones((9,9), np.uint8))
-        edge = binary - erode
-        idx_r, idx_c = np.where(edge==255)
-        idx1 = np.stack((idx_r, idx_c), axis=1)
-        edge3d = np.zeros((edge.shape[0], edge.shape[1], 3))
-        edge3d[list(idx1.T)] = 255
-        viz = np.concatenate((img, final, edge3d), axis=1)
+    if drawcontour==True:
+        if results:
+            binary = results[0].mask*255
+            dilate = cv2.dilate(binary, np.ones((7,7), np.uint8))
+            erode = cv2.erode(dilate, np.ones((9,9), np.uint8))
+            edge = binary - erode
+            idx_r, idx_c = np.where(edge==255)
+            idx1 = np.stack((idx_r, idx_c), axis=1)
+            edge3d = np.zeros((edge.shape[0], edge.shape[1], 3))
+            edge3d[list(idx1.T)] = 255
+            viz = np.concatenate((img, final, edge3d), axis=1)
+        else:
+            viz = img
     else:
-        viz = img
+        viz = final
     cv2.imwrite(output_file, viz)
     logger.info("Inference output for {} written to output.png".format(output_file))
 #     tpviz.interactive_imshow(viz)
 
-def do_predict_ckpt(pred_func, input_file, output_file, drawcontour):
+def do_predict_ckpt(pred_func, input_file, output_file, drawcontour=True):
     print('input fn: ', input_file)
     img = cv2.imread(input_file, cv2.IMREAD_COLOR)
     results = predict_image_ckpt(img, pred_func)
@@ -129,7 +132,7 @@ def do_predict_ckpt(pred_func, input_file, output_file, drawcontour):
     
     print('  results: ', results, len(results))
     print('  drawcontour: ', drawcontour, type(drawcontour))
-    if eval(drawcontour)==True:
+    if drawcontour==True:
         if results:
     #         if len(results) == 1:
     #             results = results[0]
@@ -225,11 +228,11 @@ if __name__ == '__main__':
                 predictor = OfflinePredictor(predcfg)
                 print('done loading OfflinePredictor')
                 for i,image_file in enumerate(imgfiles): 
-                    do_predict_ckpt(predictor, os.path.join(args.predict[0], image_file), outpath+image_file, args.drawcontour)                  
+                    do_predict_ckpt(predictor, os.path.join(args.predict[0], image_file), outpath+image_file, eval(args.drawcontour))
             else:
                 sess, input_tensor, output_tensors = load_session(args.load_pb)
                 for i,image_file in enumerate(imgfiles): 
-                    do_predict_pb(sess, input_tensor, output_tensors, os.path.join(args.predict[0], image_file), outpath+image_file, args.drawcontour)  
+                    do_predict_pb(sess, input_tensor, output_tensors, os.path.join(args.predict[0], image_file), outpath+image_file, eval(args.drawcontour))
         elif args.evaluate:
             assert args.evaluate.endswith('.json'), args.evaluate
             do_evaluate(predcfg, args.evaluate)
