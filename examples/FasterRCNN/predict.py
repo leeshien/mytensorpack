@@ -129,7 +129,7 @@ def do_predict_ckpt(pred_func, input_file, output_file, drawcontour):
     
     print('  results: ', results, len(results))
     print('  drawcontour: ', drawcontour, type(drawcontour))
-    if drawcontour:
+    if eval(drawcontour)==True:
         if results:
     #         if len(results) == 1:
     #             results = results[0]
