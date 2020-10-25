@@ -128,7 +128,7 @@ def do_predict_ckpt(pred_func, input_file, output_file, drawcontour):
         final = draw_final_outputs(img, results)
     
     print('  results: ', results, len(results))
-    print('  drawcontour: ', drawcontour, type(drawcontour)
+    print('  drawcontour: ', drawcontour, type(drawcontour))
     if drawcontour:
         if results:
     #         if len(results) == 1:
