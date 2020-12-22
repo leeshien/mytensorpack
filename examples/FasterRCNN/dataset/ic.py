@@ -59,11 +59,11 @@ class ICDemo(DatasetSplit):
                     print('standard annos for {}: {}'.format(fname,annos))
                     
                 lines, poly, box = [], [], []
-
-                lines.append([annos[0]["points"][0], annos[7]["points"][0]]) # left line
-                lines.append([annos[1]["points"][0], annos[2]["points"][0]]) # top line
-                lines.append([annos[3]["points"][0], annos[4]["points"][0]]) # right line
-                lines.append([annos[6]["points"][0], annos[5]["points"][0]]) # bottom line
+                
+#                 lines.append([annos[0]["points"][0], annos[7]["points"][0]]) # left line
+#                 lines.append([annos[1]["points"][0], annos[2]["points"][0]]) # top line
+#                 lines.append([annos[3]["points"][0], annos[4]["points"][0]]) # right line
+#                 lines.append([annos[6]["points"][0], annos[5]["points"][0]]) # bottom line
 
                 for i, anno in enumerate(annos):
                     if len(anno["points"])==1:
