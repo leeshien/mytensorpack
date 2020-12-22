@@ -42,7 +42,7 @@ class ICDemo(DatasetSplit):
         imgfiles = [f for f in files if f.lower().endswith('.jpeg') or f.lower().endswith('.jpg')]
 
         ret = []
-        for fn in jsonfiles:
+        for i,fn in enumerate(jsonfiles):
             json_file = os.path.join(self.imgdir, fn)
             with open(json_file) as f:
                 obj = json.load(f)
@@ -55,8 +55,8 @@ class ICDemo(DatasetSplit):
 
                 annos = obj["shapes"]
 
-                if fname == 'all00diC03fjgrZ4PNbcBld9nzJzLDdDVAslYVtSb0d.jpeg':
-                    print('standard annos: ', annos)
+                if i == 0:
+                    print('standard annos for {}: {}'.format(fname,annos))
                     
                 lines, poly, box = [], [], []
 
