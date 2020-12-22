@@ -47,39 +47,43 @@ class ICDemo(DatasetSplit):
             with open(json_file) as f:
                 obj = json.load(f)
 
-#             try:
-            fname = [filename for filename in imgfiles if fn.split('.')[0] in filename][0] #image filename
-            fname = os.path.join(self.imgdir, fname)
+            try:
+                fname = [filename for filename in imgfiles if fn.split('.')[:-1] in filename][0] #image filename
+                fname = os.path.join(self.imgdir, fname)
 
-            roidb = {"file_name": fname}
+                roidb = {"file_name": fname}
 
-            annos = obj["shapes"]
+                annos = obj["shapes"]
 
-            lines, poly, box = [], [], []
+                if fname == 'all00diC03fjgrZ4PNbcBld9nzJzLDdDVAslYVtSb0d.jpeg':
+                    print('standard annos: ', annos)
+                    
+                lines, poly, box = [], [], []
 
-            lines.append([annos[0]["points"][0], annos[7]["points"][0]]) # left line
-            lines.append([annos[1]["points"][0], annos[2]["points"][0]]) # top line
-            lines.append([annos[3]["points"][0], annos[4]["points"][0]]) # right line
-            lines.append([annos[6]["points"][0], annos[5]["points"][0]]) # bottom line
+                lines.append([annos[0]["points"][0], annos[7]["points"][0]]) # left line
+                lines.append([annos[1]["points"][0], annos[2]["points"][0]]) # top line
+                lines.append([annos[3]["points"][0], annos[4]["points"][0]]) # right line
+                lines.append([annos[6]["points"][0], annos[5]["points"][0]]) # bottom line
 
-            for i, anno in enumerate(annos):
-                if len(anno["points"])==1:
-                    poly.append(np.asarray(anno["points"][0]))
-            poly = np.asarray(poly)
-            maxxy = poly.max(axis=0)
-            minxy = poly.min(axis=0)
+                for i, anno in enumerate(annos):
+                    if len(anno["points"])==1:
+                        poly.append(np.asarray(anno["points"][0]))
+                poly = np.asarray(poly)
+                maxxy = poly.max(axis=0)
+                minxy = poly.min(axis=0)
 
-            box.append([minxy[0], minxy[1], maxxy[0], maxxy[1]])            
+                box.append([minxy[0], minxy[1], maxxy[0], maxxy[1]])            
 
-            N = 1
-            roidb["boxes"] = np.asarray(box, dtype=np.float32)
-            roidb["segmentation"] = [[poly]]
+                N = 1
+                roidb["boxes"] = np.asarray(box, dtype=np.float32)
+                roidb["segmentation"] = [[poly]]
 
-            roidb["class"] = np.ones((N, ), dtype=np.int32)
-            roidb["is_crowd"] = np.zeros((N, ), dtype=np.int8)
-            ret.append(roidb)
-#             except Exception as e:
-#                 print('img file not found for', fn)
+                roidb["class"] = np.ones((N, ), dtype=np.int32)
+                roidb["is_crowd"] = np.zeros((N, ), dtype=np.int8)
+                ret.append(roidb)
+            except Exception as e:
+                print('img file not found for', fn)
+                print('annos: ', annos)
 
         return ret
 
