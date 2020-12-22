@@ -64,11 +64,14 @@ class ICDemo(DatasetSplit):
 #                 lines.append([annos[1]["points"][0], annos[2]["points"][0]]) # top line
 #                 lines.append([annos[3]["points"][0], annos[4]["points"][0]]) # right line
 #                 lines.append([annos[6]["points"][0], annos[5]["points"][0]]) # bottom line
-
-                for i, anno in enumerate(annos):
-                    if len(anno["points"])==1:
-                        poly.append(np.asarray(anno["points"][0]))
-                poly = np.asarray(poly)
+                
+                if len(annos) == 1:
+                    poly = np.asarray(annos[0]["points"])
+                else:
+                    for i, anno in enumerate(annos):
+                        if len(anno["points"])==1:
+                            poly.append(np.asarray(anno["points"][0]))
+                    poly = np.asarray(poly)
                 maxxy = poly.max(axis=0)
                 minxy = poly.min(axis=0)
 
