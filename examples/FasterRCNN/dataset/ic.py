@@ -105,7 +105,7 @@ class ICDemo(DatasetSplit):
                 fname = [filename for filename in imgfiles if '.'.join(fn.split('.')[:-1]) in filename][0] #image filename
                 fname = os.path.join(self.imgdir, fname)
 
-                roidb = {"file_name": fname}
+                roidb = {"file_name": fname, "image_id": i}
 
                 annos = obj["shapes"]
 
