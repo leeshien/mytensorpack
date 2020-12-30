@@ -89,6 +89,60 @@ class ICDemo(DatasetSplit):
                 print('annos: ', annos)
 
         return ret
+    
+    def inference_roidbs(self):
+        files = [f for f in os.listdir(self.imgdir) if os.path.isfile(os.path.join(self.imgdir, f))]
+        jsonfiles = [f for f in files if f.endswith('.json')]
+        imgfiles = [f for f in files if f.lower().endswith('.jpeg') or f.lower().endswith('.jpg')]
+
+        ret = []
+        for i,fn in enumerate(jsonfiles):
+            json_file = os.path.join(self.imgdir, fn)
+            with open(json_file) as f:
+                obj = json.load(f)
+
+            try:
+                fname = [filename for filename in imgfiles if '.'.join(fn.split('.')[:-1]) in filename][0] #image filename
+                fname = os.path.join(self.imgdir, fname)
+
+                roidb = {"file_name": fname}
+
+                annos = obj["shapes"]
+
+                if i == 0:
+                    print('standard annos for {}: {}'.format(fname,annos))
+                    
+                lines, poly, box = [], [], []
+                
+#                 lines.append([annos[0]["points"][0], annos[7]["points"][0]]) # left line
+#                 lines.append([annos[1]["points"][0], annos[2]["points"][0]]) # top line
+#                 lines.append([annos[3]["points"][0], annos[4]["points"][0]]) # right line
+#                 lines.append([annos[6]["points"][0], annos[5]["points"][0]]) # bottom line
+                
+                if len(annos) == 1:
+                    poly = np.asarray(annos[0]["points"])
+                else:
+                    for i, anno in enumerate(annos):
+                        if len(anno["points"])==1:
+                            poly.append(np.asarray(anno["points"][0]))
+                    poly = np.asarray(poly)
+                maxxy = poly.max(axis=0)
+                minxy = poly.min(axis=0)
+
+                box.append([minxy[0], minxy[1], maxxy[0], maxxy[1]])            
+
+                N = 1
+                roidb["boxes"] = np.asarray(box, dtype=np.float32)
+                roidb["segmentation"] = [[poly]]
+
+                roidb["class"] = np.ones((N, ), dtype=np.int32)
+                roidb["is_crowd"] = np.zeros((N, ), dtype=np.int8)
+                ret.append(roidb)
+            except Exception as e:
+                print('img file not found for', fn)
+                print('annos: ', annos)
+
+        return ret    
 
 def register_ic(basedir):
     for split in ["train", "val"]:
