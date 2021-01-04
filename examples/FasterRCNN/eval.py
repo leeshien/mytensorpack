@@ -194,7 +194,7 @@ def predict_dataflow(df, model_func, tqdm_bar=None):
         if tqdm_bar is None:
             tqdm_bar = stack.enter_context(get_tqdm(total=df.size()))
         for img, img_id in df:
-            results = predict_image(img, model_func)
+            results = predict_image_ckpt(img, model_func)
             for r in results:
                 # int()/float() to make it json-serializable
                 res = {
