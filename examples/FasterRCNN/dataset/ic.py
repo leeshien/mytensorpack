@@ -17,7 +17,7 @@ __all__ = ["register_ic"]
 
 class ICDemo(DatasetSplit):
     def __init__(self, base_dir, split):
-        assert split in ["train", "val"]
+        assert split in ["train", "val", "train_val"]
         base_dir = os.path.expanduser(base_dir)
         self.imgdir = os.path.join(base_dir, split)
         assert os.path.isdir(self.imgdir), self.imgdir
