@@ -204,7 +204,7 @@ class ICDemo(DatasetSplit):
 #             return {}    
 
 def register_ic(basedir):
-    for split in ["train", "val"]:
+    for split in ["train_val", "val"]:
         print('split: ', split)
         name = "ic_" + split
         DatasetRegistry.register(name, lambda x=split: ICDemo(basedir, x))
