@@ -22,12 +22,12 @@ class ICDemo(DatasetSplit):
         self.imgdir = os.path.join(base_dir, split)
         assert os.path.isdir(self.imgdir), self.imgdir
         
-        annotation_file = [os.path.join(self.imgdir,f) for f in os.listdir(self.imgdir) if os.path.isfile(os.path.join(self.imgdir, f)) if f.endswith('.json')]
+#         annotation_file = [os.path.join(self.imgdir,f) for f in os.listdir(self.imgdir) if os.path.isfile(os.path.join(self.imgdir, f)) if f.endswith('.json')]
         
-        from pycocotools.coco import COCO
-        self.coco = COCO(annotation_file)
-        self.annotation_file = annotation_file
-        logger.info("Instances loaded from {}.".format(annotation_file))        
+#         from pycocotools.coco import COCO
+#         self.coco = COCO(annotation_file)
+#         self.annotation_file = annotation_file
+#         logger.info("Instances loaded from {}.".format(annotation_file))        
 
     def line_intersection(self, line1, line2):
         xdiff = (line1[0][0] - line1[1][0], line2[0][0] - line2[1][0])
@@ -151,57 +151,57 @@ class ICDemo(DatasetSplit):
 
         return ret    
     
-    def print_coco_metrics(self, results):
-        """
-        Args:
-            results(list[dict]): results in coco format
-        Returns:
-            dict: the evaluation metrics
-        """
-        from pycocotools.cocoeval import COCOeval
-        ret = {}
-        has_mask = "segmentation" in results[0]  # results will be modified by loadRes
+#     def print_coco_metrics(self, results):
+#         """
+#         Args:
+#             results(list[dict]): results in coco format
+#         Returns:
+#             dict: the evaluation metrics
+#         """
+#         from pycocotools.cocoeval import COCOeval
+#         ret = {}
+#         has_mask = "segmentation" in results[0]  # results will be modified by loadRes
 
-        cocoDt = self.coco.loadRes(results)
-        cocoEval = COCOeval(self.coco, cocoDt, 'bbox')
-        cocoEval.evaluate()
-        cocoEval.accumulate()
-        cocoEval.summarize()
-        fields = ['IoU=0.5:0.95', 'IoU=0.5', 'IoU=0.75', 'small', 'medium', 'large']
-        for k in range(6):
-            ret['mAP(bbox)/' + fields[k]] = cocoEval.stats[k]
+#         cocoDt = self.coco.loadRes(results)
+#         cocoEval = COCOeval(self.coco, cocoDt, 'bbox')
+#         cocoEval.evaluate()
+#         cocoEval.accumulate()
+#         cocoEval.summarize()
+#         fields = ['IoU=0.5:0.95', 'IoU=0.5', 'IoU=0.75', 'small', 'medium', 'large']
+#         for k in range(6):
+#             ret['mAP(bbox)/' + fields[k]] = cocoEval.stats[k]
 
-        if len(results) > 0 and has_mask:
-            cocoEval = COCOeval(self.coco, cocoDt, 'segm')
-            cocoEval.evaluate()
-            cocoEval.accumulate()
-            cocoEval.summarize()
-            for k in range(6):
-                ret['mAP(segm)/' + fields[k]] = cocoEval.stats[k]
-        return ret
+#         if len(results) > 0 and has_mask:
+#             cocoEval = COCOeval(self.coco, cocoDt, 'segm')
+#             cocoEval.evaluate()
+#             cocoEval.accumulate()
+#             cocoEval.summarize()
+#             for k in range(6):
+#                 ret['mAP(segm)/' + fields[k]] = cocoEval.stats[k]
+#         return ret
     
     
-    def eval_inference_results(self, results, output=None):
-#         continuous_id_to_COCO_id = {v: k for k, v in self.COCO_id_to_category_id.items()}
-        for res in results:
-#             # convert to COCO's incontinuous category id
-#             if res['category_id'] in continuous_id_to_COCO_id:
-#                 res['category_id'] = continuous_id_to_COCO_id[res['category_id']]
-            # COCO expects results in xywh format
-            box = res['bbox']
-            box[2] -= box[0]
-            box[3] -= box[1]
-            res['bbox'] = [round(float(x), 3) for x in box]
+#     def eval_inference_results(self, results, output=None):
+# #         continuous_id_to_COCO_id = {v: k for k, v in self.COCO_id_to_category_id.items()}
+#         for res in results:
+# #             # convert to COCO's incontinuous category id
+# #             if res['category_id'] in continuous_id_to_COCO_id:
+# #                 res['category_id'] = continuous_id_to_COCO_id[res['category_id']]
+#             # COCO expects results in xywh format
+#             box = res['bbox']
+#             box[2] -= box[0]
+#             box[3] -= box[1]
+#             res['bbox'] = [round(float(x), 3) for x in box]
 
-        if output is not None:
-            with open(output, 'w') as f:
-                json.dump(results, f)
+#         if output is not None:
+#             with open(output, 'w') as f:
+#                 json.dump(results, f)
                 
-        if len(results):
-            # sometimes may crash if the results are empty?
-            return self.print_coco_metrics(results)
-        else:
-            return {}    
+#         if len(results):
+#             # sometimes may crash if the results are empty?
+#             return self.print_coco_metrics(results)
+#         else:
+#             return {}    
 
 def register_ic(basedir):
     for split in ["train", "val"]:
