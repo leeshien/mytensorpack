@@ -22,7 +22,7 @@ class ICDemo(DatasetSplit):
         self.imgdir = os.path.join(base_dir, split)
         assert os.path.isdir(self.imgdir), self.imgdir
         
-        annotation_file = [f for f in os.listdir(self.imgdir) if os.path.isfile(os.path.join(self.imgdir, f)) if f.endswith('.json')]
+        annotation_file = [os.path.join(self.imgdir,f) for f in os.listdir(self.imgdir) if os.path.isfile(os.path.join(self.imgdir, f)) if f.endswith('.json')]
         
         from pycocotools.coco import COCO
         self.coco = COCO(annotation_file)
