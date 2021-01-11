@@ -218,8 +218,10 @@ if __name__ == '__main__':
 
         if args.predict:
             # check existence of subfolder
-            for fname in os.path.listdir(args.predict[0]):
-                if os.path.isdir(os.path.join(args.predict[0],fname)): 
+            for (path, b, files) in os.walk(args.predict[0]):
+                if path == args.predict[0]:
+                    continue
+                if os.path.isdir(os.path.join(path)): 
                     has_subfolder = True
                     break
 
