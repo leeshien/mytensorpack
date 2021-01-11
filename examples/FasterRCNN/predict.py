@@ -174,6 +174,7 @@ if __name__ == '__main__':
 
     args = parser.parse_args()
     print('args: ', args)
+    has_subfolder = False
 #     print('eval(args.gpu): ', eval(args.gpu))
 #     if eval(args.gpu)==False:
 #         os.environ['CUDA_VISIBLE_DEVICES'] = '-1'
@@ -216,23 +217,54 @@ if __name__ == '__main__':
             ModelExporter(predcfg).export_serving(args.output_serving)
 
         if args.predict:
-            print('args.predict: ', args.predict)
-            outpath = args.output_inference
-            if not os.path.exists(outpath):
-                os.makedirs(outpath)            
-            files = [f for f in os.listdir(args.predict[0]) if os.path.isfile(os.path.join(args.predict[0], f))]
-            print('predict files: ', files)
-            imgfiles = [f for f in files if f.lower().endswith('.jpg') or f.lower().endswith('.jpeg') or f.lower().endswith('.png')]    
-            print('predict imgfiles: ', imgfiles)
-            if args.load_ckpt:
-                predictor = OfflinePredictor(predcfg)
-                print('done loading OfflinePredictor')
-                for i,image_file in enumerate(imgfiles): 
-                    do_predict_ckpt(predictor, os.path.join(args.predict[0], image_file), outpath+image_file, eval(args.drawcontour))
+            # check existence of subfolder
+            for fname in os.path.listdir(args.predict[0]):
+                if os.path.isdir(os.path.join(args.predict[0],fname)): 
+                    has_subfolder = True
+                    break
+
+            if has_subfolder == True:
+                for (path, b, files) in os.walk(args.predict[0]):
+                    if path == args.predict[0]:
+                        continue
+
+                    outpath = args.output_inference + path.split('/')[-1] + '/'
+                    if not os.path.exists(outpath):
+                        os.makedirs(outpath) 
+
+                    files = [f for f in os.listdir(path) if os.path.isfile(os.path.join(path, f))]
+                    print('predict files: ', files)
+                    imgfiles = [f for f in files if f.lower().endswith('.jpg') or f.lower().endswith('.jpeg') or f.lower().endswith('.png')]    
+                    print('predict imgfiles: ', imgfiles)
+                    if args.load_ckpt:
+                        predictor = OfflinePredictor(predcfg)
+                        print('done loading OfflinePredictor')
+                        for i,image_file in enumerate(imgfiles): 
+                            do_predict_ckpt(predictor, os.path.join(path, image_file), outpath+image_file, eval(args.drawcontour))
+                    else:
+                        sess, input_tensor, output_tensors = load_session(args.load_pb)
+                        for i,image_file in enumerate(imgfiles): 
+                            do_predict_pb(sess, input_tensor, output_tensors, os.path.join(path, image_file), outpath+image_file, eval(args.drawcontour))                        
+
             else:
-                sess, input_tensor, output_tensors = load_session(args.load_pb)
-                for i,image_file in enumerate(imgfiles): 
-                    do_predict_pb(sess, input_tensor, output_tensors, os.path.join(args.predict[0], image_file), outpath+image_file, eval(args.drawcontour))
+                print('args.predict: ', args.predict)
+                outpath = args.output_inference
+                if not os.path.exists(outpath):
+                    os.makedirs(outpath)     
+
+                files = [f for f in os.listdir(args.predict[0]) if os.path.isfile(os.path.join(args.predict[0], f))]
+                print('predict files: ', files)
+                imgfiles = [f for f in files if f.lower().endswith('.jpg') or f.lower().endswith('.jpeg') or f.lower().endswith('.png')]    
+                print('predict imgfiles: ', imgfiles)
+                if args.load_ckpt:
+                    predictor = OfflinePredictor(predcfg)
+                    print('done loading OfflinePredictor')
+                    for i,image_file in enumerate(imgfiles): 
+                        do_predict_ckpt(predictor, os.path.join(args.predict[0], image_file), outpath+image_file, eval(args.drawcontour))
+                else:
+                    sess, input_tensor, output_tensors = load_session(args.load_pb)
+                    for i,image_file in enumerate(imgfiles): 
+                        do_predict_pb(sess, input_tensor, output_tensors, os.path.join(args.predict[0], image_file), outpath+image_file, eval(args.drawcontour))
         elif args.evaluate:
             assert args.evaluate.endswith('.json'), args.evaluate
             do_evaluate(predcfg, args.evaluate)
