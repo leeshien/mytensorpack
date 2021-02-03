@@ -108,10 +108,11 @@ def do_predict_pb(sess, input_tensor, output_tensors, input_file, output_file, d
             dilate = cv2.dilate(binary, np.ones((7,7), np.uint8))
             erode = cv2.erode(dilate, np.ones((9,9), np.uint8))
             edge = binary - erode
-            idx_r, idx_c = np.where(edge==255)
-            idx1 = np.stack((idx_r, idx_c), axis=1)
+#             idx_r, idx_c = np.where(edge==255)
+#             idx1 = np.stack((idx_r, idx_c), axis=1)
+            idx1 = np.where(edge==255)
             edge3d = np.zeros((edge.shape[0], edge.shape[1], 3))
-            edge3d[list(idx1.T)] = 255
+            edge3d[idx1] = 255
             viz = np.concatenate((img, final, edge3d), axis=1)
         else:
             viz = img
@@ -140,10 +141,11 @@ def do_predict_ckpt(pred_func, input_file, output_file, drawcontour=True):
             dilate = cv2.dilate(binary, np.ones((7,7), np.uint8))
             erode = cv2.erode(dilate, np.ones((9,9), np.uint8))
             edge = binary - erode
-            idx_r, idx_c = np.where(edge==255)
-            idx1 = np.stack((idx_r, idx_c), axis=1)
+#             idx_r, idx_c = np.where(edge==255)
+#             idx1 = np.stack((idx_r, idx_c), axis=1)
+            idx1 = np.where(edge==255)
             edge3d = np.zeros((edge.shape[0], edge.shape[1], 3))
-            edge3d[list(idx1.T)] = 255
+            edge3d[idx1] = 255
             viz = np.concatenate((img, final, edge3d), axis=1)
         else:
             viz = img
