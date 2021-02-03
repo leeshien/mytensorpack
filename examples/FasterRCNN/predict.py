@@ -243,11 +243,13 @@ if __name__ == '__main__':
                     if args.load_ckpt:
                         predictor = OfflinePredictor(predcfg)
                         print('done loading OfflinePredictor')
-                        for i,image_file in enumerate(imgfiles): 
+                        for i,image_file in enumerate(imgfiles):
+                            print('\n', image_file)
                             do_predict_ckpt(predictor, os.path.join(path, image_file), outpath+image_file, eval(args.drawcontour))
                     else:
                         sess, input_tensor, output_tensors = load_session(args.load_pb)
                         for i,image_file in enumerate(imgfiles): 
+                            print('\n', image_file)
                             do_predict_pb(sess, input_tensor, output_tensors, os.path.join(path, image_file), outpath+image_file, eval(args.drawcontour))                        
 
             else:
@@ -264,10 +266,12 @@ if __name__ == '__main__':
                     predictor = OfflinePredictor(predcfg)
                     print('done loading OfflinePredictor')
                     for i,image_file in enumerate(imgfiles): 
+                        print('\n', image_file)
                         do_predict_ckpt(predictor, os.path.join(args.predict[0], image_file), outpath+image_file, eval(args.drawcontour))
                 else:
                     sess, input_tensor, output_tensors = load_session(args.load_pb)
-                    for i,image_file in enumerate(imgfiles): 
+                    for i,image_file in enumerate(imgfiles):
+                        print('\n', image_file)
                         do_predict_pb(sess, input_tensor, output_tensors, os.path.join(args.predict[0], image_file), outpath+image_file, eval(args.drawcontour))
         elif args.evaluate:
             assert args.evaluate.endswith('.json'), args.evaluate
