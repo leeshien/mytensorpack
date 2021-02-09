@@ -156,6 +156,8 @@ def do_predict_ckpt(pred_func, input_file, output_file, drawcontour=True):
 
 
 if __name__ == '__main__':
+    os.environ["CUDA_VISIBLE_DEVICES"]="1"
+    
     parser = argparse.ArgumentParser()
     parser.add_argument('--load-ckpt', help='load a checkpoint model for evaluation.')
     parser.add_argument('--load-pb', help='load a pb model for evaluation.')
