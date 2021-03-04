@@ -8,6 +8,7 @@ import shutil
 import tensorflow as tf
 import cv2
 import tqdm
+import datetime
 
 import tensorpack.utils.viz as tpviz
 from tensorpack.predict import MultiTowerOfflinePredictor, OfflinePredictor, PredictConfig
@@ -246,13 +247,19 @@ if __name__ == '__main__':
                         predictor = OfflinePredictor(predcfg)
                         print('done loading OfflinePredictor')
                         for i,image_file in enumerate(imgfiles):
+                            start_t = datetime.datetime.now()
                             print('\n', image_file)
                             do_predict_ckpt(predictor, os.path.join(path, image_file), outpath+image_file, eval(args.drawcontour))
+                            end_t = datetime.datetime.now()
+                            print('Inference time: ', end_t - start_t)
                     else:
                         sess, input_tensor, output_tensors = load_session(args.load_pb)
-                        for i,image_file in enumerate(imgfiles): 
+                        for i,image_file in enumerate(imgfiles):
+                            start_t = datetime.datetime.now()
                             print('\n', image_file)
-                            do_predict_pb(sess, input_tensor, output_tensors, os.path.join(path, image_file), outpath+image_file, eval(args.drawcontour))                        
+                            do_predict_pb(sess, input_tensor, output_tensors, os.path.join(path, image_file), outpath+image_file, eval(args.drawcontour))
+                            end_t = datetime.datetime.now()
+                            print('Inference time: ', end_t - start_t)                            
 
             else:
                 print('args.predict: ', args.predict)
