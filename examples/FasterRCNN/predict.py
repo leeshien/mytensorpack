@@ -275,13 +275,19 @@ if __name__ == '__main__':
                     predictor = OfflinePredictor(predcfg)
                     print('done loading OfflinePredictor')
                     for i,image_file in enumerate(imgfiles): 
+                        start_t = datetime.datetime.now()
                         print('\n', image_file)
                         do_predict_ckpt(predictor, os.path.join(args.predict[0], image_file), outpath+image_file, eval(args.drawcontour))
+                        end_t = datetime.datetime.now()
+                        print('Inference time: ', end_t - start_t)                         
                 else:
                     sess, input_tensor, output_tensors = load_session(args.load_pb)
                     for i,image_file in enumerate(imgfiles):
+                        start_t = datetime.datetime.now()
                         print('\n', image_file)
                         do_predict_pb(sess, input_tensor, output_tensors, os.path.join(args.predict[0], image_file), outpath+image_file, eval(args.drawcontour))
+                        end_t = datetime.datetime.now()
+                        print('Inference time: ', end_t - start_t)                         
         elif args.evaluate:
             assert args.evaluate.endswith('.json'), args.evaluate
             do_evaluate(predcfg, args.evaluate)
