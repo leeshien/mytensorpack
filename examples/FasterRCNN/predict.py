@@ -28,6 +28,10 @@ from viz import (
 from load import load_session
 
 os.environ["CUDA_VISIBLE_DEVICES"]="-1"
+if tf.test.gpu_device_name():
+    print('GPU found')
+else:
+    print("No GPU found")
 
 def do_visualize(model, model_path, nr_visualize=100, output_dir='output'):
     """
