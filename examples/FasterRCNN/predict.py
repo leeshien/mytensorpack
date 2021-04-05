@@ -161,6 +161,7 @@ def do_predict_ckpt(pred_func, input_file, output_file, drawcontour=True):
             binary = np.repeat(binary[:, :, np.newaxis], 3, axis=-1)
             print(' >> binary 2: ', binary.shape)
             viz = np.concatenate((img, final, binary), axis=1)
+            print(' >> viz: ', viz.shape)
         else:
             viz = img
     else:
