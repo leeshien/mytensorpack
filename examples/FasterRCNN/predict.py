@@ -121,6 +121,7 @@ def do_predict_pb(sess, input_tensor, output_tensors, input_file, output_file, d
 #             edge3d = np.zeros((edge.shape[0], edge.shape[1], 3))
 #             edge3d[idx1] = 255
 #             viz = np.concatenate((img, final, edge3d), axis=1)
+            binary = np.repeat(binary, 3, axis=-1)
             viz = np.concatenate((img, final, binary), axis=1)
         else:
             viz = img
@@ -156,6 +157,7 @@ def do_predict_ckpt(pred_func, input_file, output_file, drawcontour=True):
 #             edge3d = np.zeros((edge.shape[0], edge.shape[1], 3))
 #             edge3d[idx1] = 255
 #             viz = np.concatenate((img, final, edge3d), axis=1)
+            binary = np.repeat(binary, 3, axis=-1)
             viz = np.concatenate((img, final, binary), axis=1)
         else:
             viz = img
