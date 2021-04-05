@@ -145,6 +145,7 @@ def do_predict_ckpt(pred_func, input_file, output_file, drawcontour=True):
         if results:
     #         if len(results) == 1:
     #             results = results[0]
+            print(' >> results: ', results)
             binary = results[0].mask*255
 #             dilate = cv2.dilate(binary, np.ones((7,7), np.uint8))
 #             erode = cv2.erode(dilate, np.ones((9,9), np.uint8))
