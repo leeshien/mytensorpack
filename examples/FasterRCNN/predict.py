@@ -27,7 +27,7 @@ from viz import (
     draw_proposal_recall, draw_final_outputs_blackwhite)
 from load import load_session
 
-os.environ["CUDA_VISIBLE_DEVICES"]="-1"
+# os.environ["CUDA_VISIBLE_DEVICES"]="-1"
 if tf.test.gpu_device_name():
     print('GPU found')
 else:
